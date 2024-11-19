@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og'
 import BackgroundImage from './background'
-// import { parse } from 'node-html-parser'
+import { parse } from 'node-html-parser'
 
 async function loadGoogleFont (font: string, text: string) {
   const url = `https://fonts.googleapis.com/css2?family=${font}:wght@600&text=${encodeURIComponent(text)}`
@@ -17,37 +17,45 @@ async function loadGoogleFont (font: string, text: string) {
   throw new Error('failed to load font data')
 }
 
-// async function fetchArticleData(url: string) {
-//   let title = 'Something Went Wrong'
-//   let imageUrl = 'https://http.cat/500'
+async function fetchArticleData(url: string) {
+  let title = 'Something Went Wrong'
+  let imageUrl = 'https://http.cat/500'
 
-//   const req = await fetch(url)
-//   if (req.status !== 200 || !req.ok) {
-//     title = req.statusText
-//     imageUrl = `https://http.cat/${req.status}`
+  const req = await fetch(url)
+  if (req.status !== 200 || !req.ok) {
+    title = req.statusText
+    imageUrl = `https://http.cat/${req.status}`
 
-//     return {
-//       title,
-//       imageUrl
-//     }
-//   }
+    return {
+      title,
+      imageUrl
+    }
+  }
 
-//   const articleContent = await req.text()
-//   const article = parse(articleContent)
+  const articleContent = await req.text()
+  const article = parse(articleContent)
 
-//   title = article.querySelector('main h1.wp-block-post-title')?.textContent ?? "Something Wrong"
-//   imageUrl = article.querySelector('meta[property="og:image"]')?.getAttribute('content') ?? imageUrl
+  title = article.querySelector('main h1.wp-block-post-title')?.textContent ?? "Something Wrong"
+  imageUrl = article.querySelector('meta[property="og:image"]')?.getAttribute('content') ?? imageUrl
 
-//   return {
-//     title,
-//     imageUrl
-//   }
-// }
+  return {
+    title,
+    imageUrl
+  }
+}
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const title = searchParams.get('title') ?? 'Title'
-  // let image = searchParams.get('image') ?? 'https://http.cat/400'
+  const articleUrl = searchParams.get('url')
+  let title = 'Please Provide URL'
+  let image = 'https://http.cat/400'
+
+
+  if (articleUrl) {
+    const articleData = await fetchArticleData(articleUrl)
+    title = articleData.title
+    image = articleData.imageUrl
+  }
 
   return new ImageResponse(
     (
@@ -55,7 +63,7 @@ export async function GET(request: Request) {
         display: 'flex'
       }}>
         <BackgroundImage style={{ position: 'absolute', left: 0, top: 0, zIndex: '1' }} />
-        {/* <img
+        <img
           src={image}
           style={{
             display: 'block',
@@ -69,7 +77,7 @@ export async function GET(request: Request) {
             borderTopLeftRadius: 28,
             borderTopRightRadius: 28
           }}
-        /> */}
+        />
         <div style={{
           display: 'flex',
           zIndex: '2',
@@ -102,4 +110,5 @@ export async function GET(request: Request) {
   )
 }
 
-export const runtime = 'edge'
+ export const runtime = 'edge'
+ export const maxDuration = 30
