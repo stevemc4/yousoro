@@ -46,16 +46,8 @@ async function fetchArticleData(url: string) {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const articleUrl = searchParams.get('url')
-  let title = 'Please Provide URL'
-  let image = 'https://http.cat/400'
-
-
-  if (articleUrl) {
-    const articleData = await fetchArticleData(articleUrl)
-    title = articleData.title
-    image = articleData.imageUrl
-  }
+  let title = searchParams.get('title') ?? 'Title'
+  let image = searchParams.get('image') ?? 'https://http.cat/400'
 
   return new ImageResponse(
     (
