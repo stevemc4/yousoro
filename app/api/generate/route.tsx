@@ -55,7 +55,7 @@ export async function GET(request: Request) {
         display: 'flex'
       }}>
         <BackgroundImage style={{ position: 'absolute', left: 0, top: 0, zIndex: '1' }} />
-        <img
+        {/* <img
           src={image}
           style={{
             display: 'block',
@@ -69,7 +69,7 @@ export async function GET(request: Request) {
             borderTopLeftRadius: 28,
             borderTopRightRadius: 28
           }}
-        />
+        /> */}
         <div style={{
           display: 'flex',
           zIndex: '2',
