@@ -35,7 +35,7 @@ async function fetchArticleData(url: string) {
   const articleContent = await req.text()
   const article = parse(articleContent)
 
-  title = article.querySelector('main h1.wp-block-post-title')?.textContent ?? "Something Wrong"
+  title = article.querySelector('h1.wp-block-post-title')?.textContent ?? 'Something Went Wrong'
   imageUrl = article.querySelector('meta[property="og:image"]')?.getAttribute('content') ?? imageUrl
 
   return {
