@@ -76,35 +76,35 @@ export async function GET(request: Request) {
           display: 'block',
           zIndex: '2',
           position: 'absolute',
-          left: 32,
-          top: 103,
-          width: 511,
-          height: 384,
+          left: 45,
+          top: 143,
+          width: 710,
+          height: 534,
           objectFit: 'cover',
-          borderTopLeftRadius: 11,
-          borderTopRightRadius: 11,
+          borderTopLeftRadius: 15,
+          borderTopRightRadius: 15,
         }} />
         <div style={{
           display: 'flex',
           zIndex: '2',
           position: 'absolute',
-          left: 32,
-          top: 483,
+          left: 44,
+          top: 672,
           justifyContent: 'center',
           alignItems: 'center',
           textAlign: 'center',
-          width: 512,
-          height: 129,
+          width: 712,
+          height: 179,
           color: '#0220B6',
-          padding: '6px 12px'
+          padding: '8px 17px'
         }}>
-          <h1 style={{ fontSize: 24, fontWeight: 600, letterSpacing: '2%', fontFamily: 'Figtree' }}>{title}</h1>
+          <h1 style={{ fontSize: 34, fontWeight: 600, letterSpacing: '2%', fontFamily: 'Figtree' }}>{title}</h1>
         </div>
       </div>
     ),
     {
-      width: 576,
-      height: 720,
+      width: 800,
+      height: 1000,
       fonts: [{ name: 'Figtree', data: fontData, style: 'normal', weight: 600 }]
     },
   )
