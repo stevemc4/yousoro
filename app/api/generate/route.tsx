@@ -1,8 +1,7 @@
 import { ImageResponse } from 'next/og'
 import BackgroundImage from './background'
-import { parse } from 'node-html-parser'
 
-async function loadGoogleFont (font: string, text: string) {
+async function loadGoogleFont(font: string, text: string) {
   const url = `https://fonts.googleapis.com/css2?family=${font}:wght@600&text=${encodeURIComponent(text)}`
   const css = await (await fetch(url)).text()
   const resource = css.match(/src: url\((.+)\) format\('(opentype|truetype)'\)/)
@@ -33,10 +32,19 @@ async function fetchArticleData(url: string) {
   }
 
   const articleContent = await req.text()
-  const article = parse(articleContent)
 
-  title = article.querySelector('h1.wp-block-post-title')?.textContent ?? 'Something Went Wrong'
-  imageUrl = article.querySelector('meta[property="og:image"]')?.getAttribute('content') ?? imageUrl
+  // Extract title using regex
+  const h1Match = articleContent.match(/<h1[^>]*class="[^"]*wp-block-post-title[^"]*"[^>]*>([\s\S]*?)<\/h1>/)
+  if (h1Match) {
+    title = h1Match[1].replace(/<[^>]*>/g, '').trim()
+  }
+
+  // Extract og:image meta tag
+  const ogImageMatch = articleContent.match(/<meta[^>]*property="og:image"[^>]*content="([^"]*)"[^>]*>/i) ||
+    articleContent.match(/<meta[^>]*content="([^"]*)"[^>]*property="og:image"[^>]*>/i)
+  if (ogImageMatch) {
+    imageUrl = ogImageMatch[1]
+  }
 
   return {
     title,
@@ -110,5 +118,5 @@ export async function GET(request: Request) {
   )
 }
 
- export const runtime = 'edge'
- export const maxDuration = 30
+export const runtime = 'edge'
+export const maxDuration = 30
