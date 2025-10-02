@@ -64,7 +64,7 @@ export async function GET(request: Request) {
       title = articleData.value.title
       image = articleData.value.imageUrl
     }
-  } catch (err) {
+  } catch {
     return new Response('Failed to fetch article data or fonts', { status: 500 })
   }
 
